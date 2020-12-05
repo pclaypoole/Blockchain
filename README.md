@@ -1,72 +1,35 @@
-# Blockchain
-Proof of Authority Development Chain
+# Blockchain 
 
-# Instructions
+### Proof of Authority 
 
-## Setup the custom out-of-the-box blockchain
+### Instructions
 
-Create a new project directory for your new network. Call it whatever you want!
+Make sure you have installed the blockchain tools and MyCrypto. See documentation in the 'blockchain_install_guide.md'
 
-Create a "Screenshots" folder inside of the project directory.
+Initialize ./puppeth command from command line or bash. 
 
-Create accounts for two (or more) nodes for the network with a separate datadir for each using geth.
+Network = bitcoins
+node 1 password : blockchain
+node 2 password : bitcoin
+enode port: enode://e1da6a73405ef8cc2555ef20e05b29d15edf47155d7d422d8be506e2307ff058285577f9eebe78f431eaa8091c5493bee7e150d78e5f81c0155d6ee3cf30fff0@127.0.0.1:30303
+ChainID = 972
 
-Run puppeth, name your network, and select the option to configure a new genesis block.
+Initialize the nodes:
 
-Choose the Clique (Proof of Authority) consensus algorithm.
+./geth --datadir node1 init bitcoins.json
+./geth --datadir node2 init bitcoins.json
 
-Paste both account addresses from the first step one at a time into the list of accounts to seal.
+Run Nodes in seperate terminals to begin mining. 
 
-Paste them again in the list of accounts to pre-fund. There are no block rewards in PoA, so you'll need to pre-fund.
+./geth --datadir node1 --unlock  “0xF76C1A7A1f57B74bc0EB4FCF495D1aC293D7636A" --mine --rpc --allow-insecure-unlock
 
-You can choose no for pre-funding the pre-compiled accounts (0x1 .. 0xff) with wei. This keeps the genesis cleaner.
+./geth --datadir node2 --unlock "0x98c948a105A5E0bA74CE9A3508F11989d091AE9F" --mine --port 30304 --bootnodes "enode://e1da6a73405ef8cc2555ef20e05b29d15edf47155d7d422d8be506e2307ff058285577f9eebe78f431eaa8091c5493bee7e150d78e5f81c0155d6ee3cf30fff0@127.0.0.1:30303"  --allow-insecure-unlock
 
-Complete the rest of the prompts, and when you are back at the main menu, choose the "Manage existing genesis" option.
+The --mine flag tells the node to mine new blocks.
 
-Export genesis configurations. This will fail to create two of the files, but you only need networkname.json.
+The --bootnodes flag allows you to pass the network info needed to find other nodes in the blockchain. This will allow us to connect both of our nodes.
 
-You can delete the networkname-harmony.json file.
+The --rpc flag enables us to talk to our second node, which will allow us to use MyCrypto or Metamask to transact on our chain.
 
-Screenshot the puppeth configuration once complete and save it to the Screenshots folder.
+The --allow-insecure-unlock Allow insecure account unlocking when account-related RPCs are exposed by http
 
-Initialize each node with the new networkname.json with geth.
-
-Run the first node, unlock the account, enable mining, and the RPC flag. Only one node needs RPC enabled.
-
-Set a different peer port for the second node and use the first node's enode address as the bootnode flag.
-
-Be sure to unlock the account and enable mining on the second node!
-
-You should now see both nodes producing new blocks, congratulations!
-
-# Send a test transaction
-
-Use the MyCrypto GUI wallet to connect to the node with the exposed RPC port.
-
-You will need to use a custom network, and include the chain ID, and use ETH as the currency.
-
-Import the keystore file from the node1/keystore directory into MyCrypto. This will import the private key.
-
-Send a transaction from the node1 account to the node2 account.
-
-Copy the transaction hash and paste it into the "TX Status" section of the app, or click "TX Status" in the popup.
-
-Screenshot the transaction metadata (status, tx hash, block number, etc) and save it to your Screenshots folder.
-
-Celebrate, you just created a blockchain and sent a transaction!
-
-# Create a repository, and instructions for launching the chain¶
-
-Create a README.md in your project directory and create documentation that explains how to start the network.
-
-Remember to include any environment setup instructions and dependencies.
-
-Be sure to include all of the geth flags required to get both nodes to mine and explain what they mean.
-
-Explain the configuration of the network, such as it's blocktime, chain ID, account passwords, ports, etc.
-
-Explain how to connect MyCrypto to your network and demonstrate (via screenshots and steps) and send a transaction.
-
-Upload the code, including the networkname.json and node folders.
-
-## Remember, never share your mainnet private keys! This is a testnet, so coins have no value here!
